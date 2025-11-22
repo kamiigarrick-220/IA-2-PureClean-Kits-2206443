@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureClean Kits</title>
+  <!--Link to CSS-->
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  </head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="brand">
+      <h1><a href="index.html">PureClean Kits</a></h1>
+    </div>
+    <nav class="main-nav">
+      <a href="login.html">Login</a> 
+      <a href="register.html">Register</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Shopping Cart</a>
+      <a href="checkout.html">Checkout</a>
+      <a href="about.html">About Us</a>
+    </nav>
+  </header>
+
+  <section class="section">
+    <h1 style="text-align:center;">Our Products</h1>  
+
+    <div class="products-grid" id="productsGrid">
+    </div>
+  </section>
+
+  <section class="section">
+    <h1 style="text-align:center;">Our Bundle Options</h1>
+    
+    <div class="bundles-grid" id="bundles-Grid">
+    </div>
+
+    <!-- Shopping Cart Button -->
+<div style="text-align:right; margin: 1rem 2rem;">
+  <button id="goToCartBtn" style="
+    padding: 10px 20px;
+    background: mediumblue;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;">View Cart(<span id="cartCount">0</span>)
+  </button>
+</div>
+
+
+  </section>
+
+<script>
+  const products = {
+    liquids: [
+      { name: "All-Purpose Cleaner", price: "$700 JMD", img: "../Assets/all-purpose-cleaner.webp" },
+      { name: "Dishwashing Liquid", price: "$1,000 JMD", img: "../Assets/dishwashing-liquid2.jpg" },
+      { name: "Kitchen All-Purpose Cleaner", price: "$750 JMD", img: "../Assets/kitchen-all-purpose.jpeg" },
+      { name: "Kitchen Degreaser", price: "$1,500 JMD", img: "../Assets/kitchen-degreaser.jpeg" },
+      { name: "Bathroom Cleaner", price: "$1,200 JMD", img: "../Assets/bathroom-cleaner.png" },
+      { name: "Glass Cleaner", price: "$1,300 JMD", img: "../Assets/glass-cleaner.jpg" },
+      { name: "Tile Cleaner", price: "$2,000 JMD", img: "../Assets/Tile-cleaner.webp" },
+      { name: "Toilet Bowl Cleaner", price: "$2,500 JMD", img: "../Assets/toilet-bowl-cleaner.webp" },
+      { name: "Bleach", price: "$3,000 JMD", img: "../Assets/bleach-pic.png" },
+      { name: "Shower Cleaner", price: "$1,500 JMD", img: "../Assets/shower-cleaner2.jpg" },
+      { name: "Disinfectant Spray", price: "$800 JMD", img: "../Assets/dis-spray.jpg" },
+      { name: "Disinfectant Wipes", price: "$900 JMD", img: "../Assets/wipes.webp" }
+    ],
+    tools: [
+      { name: "Scrub Brush", price: "$500 JMD", img: "../Assets/cleaning-brush.jpg" },
+      { name: "Scrubbing Sponge", price: "$500 JMD", img: "../Assets/scrub-sponge.jpg" },
+      { name: "Grout/Detail Brush", price: "$1,000 JMD", img: "../Assets/grout-brush.jpg" },
+      { name: "Toilet Brush", price: "$1,000 JMD", img: "../Assets/toilet-brush.jpeg" },
+      { name: "Duster", price: "$1,500 JMD", img: "../Assets/duster.jpg" },
+      { name: "Mop", price: "$1,000 JMD", img: "../Assets/mop.webp" },
+      { name: "Brooms", price: "$1,000 JMD", img: "../Assets/broom.jpeg" },
+      { name: "Dustpan", price: "$800 JMD", img: "../Assets/dust-pan.jpg" },
+      { name: "(5 PK) Microfiber Cloth", price: "$700 JMD", img: "../Assets/microfiber-cloths.jpg" },
+      { name: "(2 PK) Spray Bottle", price: "$500 JMD", img: "../Assets/spray-bottle.webp" },
+      { name: "(33 PK) Garbage Bags", price: "$3,500 JMD", img: "../Assets/garbage-bag.jpg" },
+      { name: "(5 PK) Gloves", price: "$1,000 JMD", img: "../Assets/gloves.jpg" }
+    ]
+  };
+
+  const grid = document.getElementById("productsGrid");
+
+  // Load ALL products
+  const allProducts = [...products.liquids, ...products.tools];
+
+  allProducts.forEach(product => {
+    const card = document.createElement("div");
+    card.classList.add("product-card");
+
+    card.innerHTML = `
+      <img src="${product.img}" alt="${product.name}">
+      <h4>${product.name}</h4>
+      <p>${product.price}</p>
+      <button onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  // BUNDLES
+  const bundles = [
+    {
+      name: "The perfect introduction to simple, effective cleaning. Ideal for new apartment dwellers or first-time cleaners",
+      price: "$10,000 JMD",
+      img: "../Assets/6.png"
+    },
+    {
+      name: "The ultimate grease-fighting, grime-removing arsenal.",
+      price: "$15,000 JMD",
+      img: "../Assets/1.png"
+    },
+    {
+      name: "Transform your bathroom from dull to dazzling.",
+      price: "$15,000 JMD",
+      img: "../Assets/2.png"
+    },
+    {
+      name: "Our most comprehensive kit for the ultimate clean.",
+      price: "$25,000 JMD",
+      img: "../Assets/3.png"
+    },
+    {
+      name: "Maintain a professional, hygienic environment.",
+      price: "$35,000",
+      img: "../Assets/4.png"
+    }
+  ];
+
+  const bundlesGrid = document.getElementById("bundles-Grid");
+
+  bundles.forEach(bundle => {
+    const card = document.createElement("div");
+    card.classList.add("bundle-card");
+
+    card.innerHTML = `
+      <img src="${bundle.img}" alt="${bundle.name}">
+      <h4>${bundle.name}</h4>
+      <p>${bundle.price}</p>
+      <button onclick='addToCart(${JSON.stringify(bundle)})'>Add to Cart</button>
+    `;
+
+    bundlesGrid.appendChild(card);
+  });
+
+  // addToCart FUNCTION
+  function addToCart(item) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push(item);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(item.name + " added to cart!");
+  }
+
+  const goToCartBtn = document.getElementById("goToCartBtn");
+  const cartCount = document.getElementById("cartCount");
+
+  // Redirect to cart when button clicked
+  goToCartBtn.addEventListener("click", () => {
+    window.location.href = "cart.html";
+  });
+
+  // Load cart from localStorage
+  function updateCartCount() {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    cartCount.innerText = totalItems;
+  }
+
+  // Initial count
+  updateCartCount();
+
+  // Optional: Update count periodically if cart can change without reload
+  setInterval(updateCartCount, 1000);
+
+</script>
+
+
+
+
+
+
+   <section class="site-footer">
+        <p>&copy; 2025 PureClean Kits. All rights reserved.</p>
+    </footer>
+</body>
+</html>

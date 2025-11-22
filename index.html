@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureClean Kits</title>
+  <!--Link to CSS-->
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  </head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="brand">
+      <h1><a href="index.html">PureClean Kits</a></h1>
+    </div>
+    <nav class="main-nav">
+      <a href="login.html">Login</a> 
+      <a href="register.html">Register</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Shopping Cart</a>
+      <a href="checkout.html">Checkout</a>
+      <a href="about.html">About Us</a>
+    </nav>
+  </header>
+
+  <!--Landing Page-->
+  <header class="hero">
+    <div class="hero-content">
+        <h1><i>PureClean Kits</i></h1>
+        <h1><i>Your Home to All-in-One Cleaning Kits</i></h1><br>
+        <img src="../Assets/Household bundle.jpg" alt="Household Bundle"><br><br>
+        <p><strong>Easy, Effective and Affordable Cleaning Solutions for Every Space.</strong></p><br>
+        <a href="products.html" class="btn">SHOP NOW</a>
+    </div>
+  </header>
+
+  <!--Features Section-->
+  <section class="features">
+    <h1>Why Choose PureClean Kits?</h1><br>
+    <div class="feature-boxes">
+        <div class="box">
+            <h3><strong>All-In-One</strong></h3>
+            <p><strong>Everything you need, nothing you don't.</strong><br>Each kit is a complete system, catered just for you.
+            Get instant cleaning without a second trip to the store for that one forgotten scrubber.</p>
+        </div>
+        <div class="box">
+            <h3><strong>Bundled Savings</strong></h3>
+            <p>Buying <strong>PureClean Kits </strong>is more cost-effective than purchasing every product and tool individually.
+                Get the quality you deserve for a price that fits your budget.</p>
+        </div>
+        <div class="box">
+            <h3><strong>Starter-Kit Advantage</strong></h3>
+            <p>Perfect for new homeowners, or first time cleaners. <strong>PureClean Kits</strong> give you the perfect 
+                foundation without the overwhelming cost and research.</p>
+        </div>
+    </div>
+  </section>
+
+
+  <script>
+
+    //Shop now linked to products page
+    document.getElementById("shopNowBtn").addEventListener("click", () => {
+    window.location.href = "products.html";
+  });
+
+document.addEventListener("DOMContentLoaded", function() {
+  let logoutBtn = document.getElementById("logoutBtn");
+
+  // Show logout only if user is logged in
+  if (localStorage.getItem("loggedInUser")) {
+    logoutBtn.style.display = "inline-block";
+  }
+
+  logoutBtn.addEventListener("click", function() {
+    localStorage.removeItem("loggedInUser");
+    alert("Logged out!");
+    window.location.reload();
+  });
+});
+</script>
+
+  <section class="site-footer">
+        <p>&copy; 2025 PureClean Kits. All rights reserved.</p>
+    </footer>
+</body>
+</html>

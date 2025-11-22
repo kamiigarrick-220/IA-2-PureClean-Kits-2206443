@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureClean Kits</title>
+  <!--Link to CSS-->
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  </head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="brand">
+      <h1><a href="index.html">PureClean Kits</a></h1>
+    </div>
+    <nav class="main-nav">
+      <a href="login.html">Login</a> 
+      <a href="register.html">Register</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Shopping Cart</a>
+      <a href="checkout.html">Checkout</a>
+      <a href="about.html">About Us</a>
+    </nav>
+  </header>
+
+
+  <section class="section">
+  <h1 class="checkout-title">CheckOut your Shopping Cart</h1>
+
+  <div class="order-summary" id="cartSummary"></div>
+  <br><br>
+
+  <!--back to cart and checkout buttons-->
+  <div style="text-align:center; margin-bottom: 20px;">
+    <button id="backToCartBtn" class="btn btn-secondary">Back to Cart</button>
+    <button id="checkoutBtn" class="btn btn-primary">Checkout</button>
+  </div>
+
+  <div class="cart-totals">
+    <div><span>Subtotal:</span> <span id="subtotalVal">0 JMD</span></div>
+    <div><span>Discount (10%):</span> <span id="discountVal">0 JMD</span></div>
+    <div><span>Tax (15%):</span> <span id="taxVal">0 JMD</span></div>
+    <div><strong>Total:</strong> <strong id="totalVal">0 JMD</strong></div>
+  </div>
+</section>
+
+
+<!--shipping form is hidden until make payment is clicked-->
+<div class="checkout-form-container" id="shippingForm" style="display:none;">
+  <h2>Shipping Details</h2>
+
+  <form id="shippingDetailsForm">
+
+    <label>Full Name:</label>
+    <input type="text" id="shipName" required>
+
+    <label>Shipping Address:</label>
+    <textarea id="shipAddress" required></textarea>
+
+    <label>Amount (JMD):</label>
+    <input type="number" id="shipAmount" readonly>
+
+    <br><br>
+
+    <button type="button" id="makePaymentBtn" class="btn btn-primary">Make Payment</button>
+    <button type="button" id="cancelOrderBtn" class="btn btn-cancel">Cancel</button>
+
+  </form>
+</div>
+
+
+<!-- action button -->
+<div class="checkout-buttons">
+  <button id="clearAllBtn" class="btn btn-danger">Clear All</button>
+  <button id="closeBtn" class="btn btn-secondary">Close</button>
+</div>
+
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const cartSummary = document.getElementById("cartSummary");
+
+function priceToNumber(priceString) {
+  return Number(priceString.replace(/[^0-9]/g, ""));
+}
+
+function loadCheckout() {
+  cartSummary.innerHTML = "";
+
+  cart.forEach((item, index) => {
+    const cartItem = document.createElement("div");
+    cartItem.classList.add("cart-item");
+
+    cartItem.innerHTML = `
+      <img src="${item.img}" alt="${item.name}">
+      <div class="cart-item-info">
+        <h4>${item.name}</h4>
+        <p>${item.price}</p>
+      </div>
+
+      <div class="cart-item-quantity">
+        <input type="number" min="1" value="${item.quantity || 1}" 
+        onchange="updateQuantity(${index}, this.value)">
+      </div>
+
+      <div class="cart-item-subtotal" id="subtotal-${index}">${item.price}</div>
+
+      <button onclick="removeItem(${index})">Remove</button>
+    `;
+
+    cartSummary.appendChild(cartItem);
+  });
+
+  calculateTotals();
+}
+
+function updateQuantity(index, value) {
+  cart[index].quantity = Number(value);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  calculateTotals();
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  loadCheckout();
+}
+
+function calculateTotals() {
+  let subtotal = 0;
+
+  cart.forEach((item, i) => {
+    const price = priceToNumber(item.price);
+    const qty = item.quantity || 1;
+    const itemTotal = price * qty;
+    subtotal += itemTotal;
+    if(document.getElementById(`subtotal-${i}`)) {
+      document.getElementById(`subtotal-${i}`).innerText = itemTotal + " JMD";
+    }
+  });
+
+  const discount = subtotal * 0.10;
+  const taxable = subtotal - discount;
+  const tax = taxable * 0.15;
+  const grandTotal = taxable + tax;
+
+  document.getElementById("subtotalVal").innerText = subtotal + " JMD";
+  document.getElementById("discountVal").innerText = discount + " JMD";
+  document.getElementById("taxVal").innerText = tax + " JMD";
+  document.getElementById("totalVal").innerText = grandTotal + " JMD";
+}
+
+loadCheckout();
+
+// SHOW SHIPPING FORM WHEN CHECKOUT IS CLICKED
+document.getElementById("checkoutBtn").addEventListener("click", () => {
+  document.getElementById("shippingForm").style.display = "block";
+
+  // auto-fill amount
+  let total = document.getElementById("totalVal").innerText.replace(" JMD", "");
+  document.getElementById("shipAmount").value = total;
+});
+
+
+// MAKE PAYMENT BUTTON LOGIC
+document.getElementById("makePaymentBtn").addEventListener("click", function () {
+  let user = localStorage.getItem("loggedInUser");
+
+  if (!user) {
+    alert("You need an account to make a payment.");
+    window.location.href = "register.html";
+    return;
+  }
+
+  let name = document.getElementById("shipName").value.trim();
+  let address = document.getElementById("shipAddress").value.trim();
+
+  if (name === "" || address === "") {
+    alert("Please fill out all shipping details before continuing.");
+    return;
+  }
+
+  alert("Redirecting to secure banking/payment page...");
+
+  // Payment
+  localStorage.removeItem("cart");
+  window.location.href = "index.html";
+});
+
+
+// cancel button and hidden form
+document.getElementById("cancelOrderBtn").addEventListener("click", () => {
+  document.getElementById("shippingForm").style.display = "none";
+});
+
+
+// clear all 
+document.getElementById("clearAllBtn").addEventListener("click", () => {
+  if (confirm("Clear your entire order?")) {
+    localStorage.removeItem("cart");
+    document.getElementById("shippingDetailsForm").reset();
+    loadCheckout();
+  }
+});
+
+
+// back to cart
+document.getElementById("backToCartBtn").addEventListener("click", () => {
+  window.location.href = "cart.html";
+});
+
+// close page
+document.getElementById("closeBtn").addEventListener("click", () => {
+  window.location.href = "index.html";
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <section class="site-footer">
+        <p>&copy; 2025 PureClean Kits. All rights reserved.</p>
+    </footer>
+</body>
+</html>

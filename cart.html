@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PureClean Kits</title>
+  <!--Link to CSS-->
+  <link rel="stylesheet" href="../style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+  </head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="brand">
+      <h1><a href="index.html">PureClean Kits</a></h1>
+    </div>
+    <nav class="main-nav">
+      <a href="login.html">Login</a> 
+      <a href="register.html">Register</a>
+      <a href="products.html">Products</a>
+      <a href="cart.html">Shopping Cart</a>
+      <a href="checkout.html">Checkout</a>
+      <a href="about.html">About Us</a>
+    </nav>
+  </header>
+
+  <section class="section">
+    <h1 style="text-align:center;">Your Shopping Cart</h1>
+    <div class="products-grid" id="cartGrid"></div>
+
+    <!-- Add More Products Button -->
+<div style="text-align:center; margin-bottom: 20px;">
+  <button id="addMoreBtn" style="
+    padding: 10px 20px;
+    background: mediumseagreen;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;">
+    Add More Products
+  </button>
+</div>
+
+    <!-- Proceed to Checkout Button -->
+  <div style="text-align:center; margin-top: 20px;">
+    <button id="checkoutBtn" style="
+      padding: 10px 20px; 
+      background: violet; 
+      color: black; 
+      border: none; 
+      border-radius: 8px; 
+      cursor: pointer;
+      font-size: 16px;">
+      Proceed to Checkout
+    </button>
+  </div>
+  </section>
+
+
+  <script>
+  const cartGrid = document.getElementById("cartGrid");
+
+  // Get cart items from localStorage
+  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // Display each item in the cart
+  cartItems.forEach(item => {
+    const card = document.createElement("div");
+    card.classList.add("product-card");
+
+    card.innerHTML = `
+      <img src="${item.img}" alt="${item.name}">
+      <h4>${item.name}</h4>
+      <p>${item.price}</p>
+     
+    `;
+
+    cartGrid.appendChild(card);
+  });
+
+
+   const addMoreBtn = document.getElementById("addMoreBtn");
+
+  addMoreBtn.addEventListener("click", () => {
+    window.location.href = "products.html"; // Redirect to products page
+  });
+
+  const checkoutBtn = document.getElementById("checkoutBtn");
+
+  checkoutBtn.addEventListener("click", () => {
+    // Redirect to checkout page
+    window.location.href = "checkout.html";
+  });
+</script>
+
+
+
+
+
+
+
+
+
+
+   <section class="site-footer">
+        <p>&copy; 2025 PureClean Kits. All rights reserved.</p>
+    </footer>
+</body>
+</html>
